@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>焊接岗位标准作业流程</title>
   <style>
     body {
@@ -37,9 +37,19 @@
       cursor: pointer;
     }
     button.complete { background-color: #28a745; color: white; }
+    button.back { background-color: #6c757d; color: white; }
     button.confused { background-color: #ffc107; color: black; }
-    button.overview-btn { background-color: #007bff; color: white; }
-    button.back-btn { background-color: #6c757d; color: white; }
+    #overviewToggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 50px;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
     ol { text-align: left; margin-top: 20px; }
   </style>
 </head>
@@ -75,20 +85,23 @@
     <div class="overview">
       <h2>作业流程总览</h2>
       <ol>
-        <li>准备工作：确认设备和材料</li>
-        <li>定位与夹紧：防止工件变形</li>
-        <li>开始焊接：保持角度和速度</li>
-        <li>焊后处理：清渣、自检、记录</li>
+        <li><strong>步骤 1：</strong>确认焊机设备完好，检查保护气体、焊丝等材料是否齐全。</li>
+        <li><strong>步骤 2：</strong>根据作业图纸，将工件正确定位并夹紧，防止变形。</li>
+        <li><strong>步骤 3：</strong>按照焊接顺序操作，保持合适的角度和速度，确保焊缝均匀。</li>
+        <li><strong>步骤 4：</strong>检查焊缝质量，清除焊渣，做好自检记录。</li>
+        <li><strong>步骤 5：</strong>已完成全部步骤，请继续下一工序。</li>
       </ol>
-      <button class="back-btn" onclick="backToStep()">返回逐步流程</button>
+      <button class="back" onclick="backToStep()">返回逐步流程</button>
     </div>
 
     <div class="buttons">
+      <button class="back" onclick="prevStep()">上一步</button>
       <button class="complete" onclick="nextStep()">完成</button>
       <button class="confused" onclick="showHelp()">不懂</button>
-      <button class="overview-btn" onclick="showOverview()">查看流程总览</button>
     </div>
   </div>
+
+  <button id="overviewToggle" onclick="toggleOverview()">查看流程总览</button>
 
   <script>
     let currentStep = 0;
@@ -109,13 +122,25 @@
       }
     }
 
+    function prevStep() {
+      if (currentStep > 0) {
+        currentStep--;
+        showStep(currentStep);
+      }
+    }
+
     function showHelp() {
       alert("提示：请联系班组长或查看培训视频。");
     }
 
-    function showOverview() {
-      steps.forEach(step => step.classList.remove('active'));
-      overview.classList.add('active');
+    function toggleOverview() {
+      const isActive = overview.classList.contains('active');
+      if (!isActive) {
+        steps.forEach(step => step.classList.remove('active'));
+        overview.classList.add('active');
+      } else {
+        showStep(currentStep);
+      }
     }
 
     function backToStep() {
