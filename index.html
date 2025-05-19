@@ -19,31 +19,28 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       text-align: center;
     }
-    .step {
+    .step, .overview {
       display: none;
     }
-    .step.active {
+    .step.active, .overview.active {
       display: block;
     }
     .buttons {
       margin-top: 20px;
     }
     button {
-      padding: 10px 20px;
-      margin: 0 10px;
-      font-size: 16px;
+      padding: 10px 15px;
+      margin: 5px;
+      font-size: 15px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
-    button.complete {
-      background-color: #28a745;
-      color: white;
-    }
-    button.confused {
-      background-color: #ffc107;
-      color: black;
-    }
+    button.complete { background-color: #28a745; color: white; }
+    button.confused { background-color: #ffc107; color: black; }
+    button.overview-btn { background-color: #007bff; color: white; }
+    button.back-btn { background-color: #6c757d; color: white; }
+    ol { text-align: left; margin-top: 20px; }
   </style>
 </head>
 <body>
@@ -75,20 +72,34 @@
       <p>已完成全部步骤，请继续下一工序。</p>
     </div>
 
+    <div class="overview">
+      <h2>作业流程总览</h2>
+      <ol>
+        <li>准备工作：确认设备和材料</li>
+        <li>定位与夹紧：防止工件变形</li>
+        <li>开始焊接：保持角度和速度</li>
+        <li>焊后处理：清渣、自检、记录</li>
+      </ol>
+      <button class="back-btn" onclick="backToStep()">返回逐步流程</button>
+    </div>
+
     <div class="buttons">
       <button class="complete" onclick="nextStep()">完成</button>
       <button class="confused" onclick="showHelp()">不懂</button>
+      <button class="overview-btn" onclick="showOverview()">查看流程总览</button>
     </div>
   </div>
 
   <script>
     let currentStep = 0;
     const steps = document.querySelectorAll('.step');
+    const overview = document.querySelector('.overview');
 
     function showStep(index) {
       steps.forEach((step, i) => {
         step.classList.toggle('active', i === index);
       });
+      overview.classList.remove('active');
     }
 
     function nextStep() {
@@ -100,6 +111,15 @@
 
     function showHelp() {
       alert("提示：请联系班组长或查看培训视频。");
+    }
+
+    function showOverview() {
+      steps.forEach(step => step.classList.remove('active'));
+      overview.classList.add('active');
+    }
+
+    function backToStep() {
+      showStep(currentStep);
     }
   </script>
 </body>
